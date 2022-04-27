@@ -7,10 +7,3 @@ exports.cartRepo = async (id) => {
   });
   return carts;
 };
-// exports.addItem = async (payload, author) => {
-//   // const newItem = await Cart.create(payload);
-//   // return newItem;
-//   const cart = new Cart({ ...payload, author });
-//   await cart.populate("author");
-//   return cart;
-// };
