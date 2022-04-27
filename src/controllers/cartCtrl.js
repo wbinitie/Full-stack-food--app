@@ -1,21 +1,20 @@
-const Cart = require("../models/cart");
-const Food = require("../models/food");
 const foodRepo = require("../repo/foodRepo");
-const { cartRepo, addItem } = require("../repo/cartRepo");
-const { response } = require("express");
+const Cart = require("../models/cart");
+
+const { cartRepo } = require("../repo/cartRepo");
 
 const addToCart = async (req, res) => {
   const { foodId } = req.body;
   const quantity = Number.parseInt(req.body.quantity, 10); // always rounds up
 
   try {
-    let cart = await cartRepo();
+    let cart = await cartRepo(req.user._id);
     const foodDetails = await foodRepo.foodById(foodId);
     if (!foodDetails)
       return res.status(404).send({ message: "Food Not Found" });
 
     // if cart exists
-    if (cart) {
+    if (cart !== null) {
       // check if index exists
       const indexFound = cart.items.findIndex(
         (item) => item.foodId.id === foodId
@@ -80,8 +79,12 @@ const addToCart = async (req, res) => {
         ],
         subTotal: parseInt(price * quantity, 10),
       };
-      cart = await addItem(cartData);
-      res.status(200).send({ message: "cart saved successfully", data });
+      // cart = await addItem(cartData, req.user._id);
+      // await cart.save();
+      cart = new Cart({ ...cartData, author: req.user._id });
+      await cart.populate("author");
+      await cart.save();
+      res.status(201).send({ message: "cart saved successfully", cart });
     }
   } catch (error) {
     res.status(400).send(error);
@@ -92,7 +95,7 @@ const removeSingleFoodFromCart = async (req, res) => {
   const { foodId } = req.body;
 
   try {
-    const cart = await cartRepo();
+    const cart = await cartRepo(req.user._id);
     const foodDetails = await foodRepo.foodById(foodId);
     if (!foodDetails)
       return res.status(404).send({ message: "Food not found" });
@@ -134,7 +137,7 @@ const removeSingleFoodFromCart = async (req, res) => {
 
 const clearCart = async (req, res) => {
   try {
-    const cart = await cartRepo();
+    const cart = await cartRepo(req.user._id);
     cart.items = [];
     cart.subTotal = 0;
     const data = await cart.save();
@@ -146,16 +149,16 @@ const clearCart = async (req, res) => {
 
 const getUserCart = async (req, res) => {
   try {
-    const cart = await cartRepo();
+    const cart = await cartRepo(req.user._id);
     if (!cart) return res.status(404).send({ message: "Cart not found" });
     res.status(200).send({ cart });
   } catch (error) {
-    res.status(500).json(err);
+    res.status(500).json(error);
   }
 };
 
 const getAllCarts = async (req, res) => {
-  const cart = await cartRepo();
+  const cart = await Cart.find();
   res.send({ cart });
 };
 

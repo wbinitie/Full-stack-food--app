@@ -3,6 +3,7 @@ const { isEmail } = require("validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
+const Cart = require("./cart");
 
 const userSchema = new mongoose.Schema(
   {
@@ -93,6 +94,13 @@ userSchema.pre("save", async function (next) {
     user.password = await bcrypt.hash(user.password, 8);
   }
 
+  next();
+});
+
+// delete the cart of users who delete accounts
+userSchema.pre("remove", async function (next) {
+  const user = this;
+  await Cart.deleteMany({ author: user._id });
   next();
 });
 

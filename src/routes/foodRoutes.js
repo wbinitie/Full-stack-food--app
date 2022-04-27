@@ -11,7 +11,7 @@ const {
   getSingleFood,
 } = require("../controllers/foodCtrl");
 
-router.route("/foods").get(adminAuth, getAllFoods).post(adminAuth, createFood);
+router.route("/foods").get(getAllFoods).post(adminAuth, createFood);
 
 router
   .route("/foods/:id")
