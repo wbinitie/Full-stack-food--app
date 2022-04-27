@@ -2,6 +2,7 @@ const Cart = require("../models/cart");
 const Food = require("../models/food");
 const foodRepo = require("../repo/foodRepo");
 const { cartRepo, addItem } = require("../repo/cartRepo");
+const { response } = require("express");
 
 const addToCart = async (req, res) => {
   const { foodId } = req.body;
@@ -153,11 +154,15 @@ const getUserCart = async (req, res) => {
   }
 };
 
-const getAllCarts = async (req, res) => {};
+const getAllCarts = async (req, res) => {
+  const cart = await cartRepo();
+  res.send({ cart });
+};
 
 module.exports = {
   addToCart,
   getUserCart,
   clearCart,
   removeSingleFoodFromCart,
+  getAllCarts,
 };
