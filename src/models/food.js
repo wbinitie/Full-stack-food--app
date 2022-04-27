@@ -6,10 +6,15 @@ const foodSchema = mongoose.Schema(
       type: String,
       text: true,
       required: true,
+      unique: true,
     },
     price: {
       type: Number,
       required: true,
+    },
+    restaurant: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Restaurant",
     },
   },
   {
@@ -18,4 +23,4 @@ const foodSchema = mongoose.Schema(
 );
 
 const Food = mongoose.model("Food", foodSchema);
-module.exports = Food;
+module.exports = { Food, foodSchema };

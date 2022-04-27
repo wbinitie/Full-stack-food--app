@@ -1,8 +1,26 @@
-const Food = require("../models/food");
+const { Food } = require("../models/food");
+const Restaurant = require("../models/restaurant");
 
 const createFood = async (req, res) => {
-  const food = new Food({ ...req.body });
+  const food = new Food({ ...req.body, restaurant: req.params.id });
+  const foods = await Food.find();
+  const restaurant = await Restaurant.findById(req.params.id);
+
+  await food.populate("restaurant");
+
+  const newData = {
+    name: restaurant.name,
+    menu: [
+      ...foods,
+      {
+        dish: food.dish,
+        price: food.price,
+        restaurant: req.params.id,
+      },
+    ],
+  };
   try {
+    await restaurant.updateOne(newData);
     await food.save();
     res.status(201).send({ message: "Food saved successfully", food });
   } catch (err) {
