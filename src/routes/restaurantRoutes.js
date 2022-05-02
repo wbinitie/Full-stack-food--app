@@ -1,7 +1,7 @@
 const express = require("express");
 const router = new express.Router();
 
-const { adminAuth } = require("../middleware/auth");
+const { auth, adminAuth } = require("../middleware/auth");
 
 const {
   addRestaurant,
@@ -13,13 +13,13 @@ const {
 
 router
   .route("/restaurant")
-  .get(adminAuth, getAllRestaurant)
-  .post(adminAuth, addRestaurant);
+  .get(getAllRestaurant)
+  .post(auth, adminAuth, addRestaurant);
 
 router
   .route("/restaurant/:id")
-  .get(adminAuth, getRestaurant)
-  .patch(adminAuth, updateRestaurant)
-  .delete(adminAuth, removeRestaurant);
+  .get(auth, adminAuth, getRestaurant)
+  .patch(auth, adminAuth, updateRestaurant)
+  .delete(auth, adminAuth, removeRestaurant);
 
 module.exports = router;

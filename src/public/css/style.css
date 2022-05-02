@@ -1,0 +1,210 @@
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.welcome-header {
+  font-size: 40px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 40px;
+}
+.restaurant-selector {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 40px;
+}
+#restaurants {
+  font-size: 24px;
+}
+label {
+  margin-top: 40px;
+  font-size: 24px;
+  padding-bottom: 20px;
+}
+
+.login-container {
+  background-color: rgb(249 250 251);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.div-login-container {
+  width: 100%;
+  max-width: 30rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+}
+
+.sign-up-div {
+  background-color: rgb(255 255 255);
+  padding: 2rem 1.5rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 12%), 0 2px 4px 0 rgb(0 0 0 / 8%);
+  color: black;
+  width: 100%;
+}
+.sign-up-h1 {
+  margin-bottom: 2rem;
+  font-size: 1.875rem /* 30px */ !important;
+  line-height: 2.25rem /* 36px */ !important;
+  text-align: center !important;
+}
+.sign-up-input {
+  overflow: visible;
+  display: block;
+  border-width: 1px;
+  border-color: #dae4e9;
+  width: 95%;
+  padding: 0.75rem /* 12px */ !important;
+  border-radius: 0.25rem /* 4px */ !important;
+  margin-bottom: 1rem /* 16px */ !important;
+}
+.sign-up-button {
+  width: 100%;
+  text-align: center;
+  padding: 0.75rem 0;
+  border-radius: 0.25rem /* 4px */ !important;
+  color: white;
+  background-color: #3b9035;
+  margin: 0.25rem 0;
+}
+.sign-up-button:hover {
+  background-color: #285c24;
+}
+.sign-up-button:focus {
+  outline: 2px solid transparent !important;
+  outline-offset: 2px !important;
+}
+
+.footer-text {
+  text-align: center;
+  font-size: 0.875rem /* 14px */ !important;
+  line-height: 1.25rem /* 20px */ !important;
+  color: rgb(96, 94, 94);
+  margin-top: 1rem /* 16px */ !important;
+}
+.footer-anchor {
+  text-decoration-line: none !important;
+  border-bottom-width: 1px !important;
+  border-color: rgb(96, 94, 94);
+  color: rgb(96, 94, 94);
+}
+.footer-anchor-text-1 {
+  color: rgb(96, 94, 94);
+  margin-top: 1.5rem;
+}
+.footer-anchor-text-2 {
+  text-decoration-line: none !important;
+  border-bottom-width: 1px !important;
+  border-color: blue;
+  color: blue;
+}
+.nav-ul {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  padding: 2rem;
+  list-style: none;
+  margin: 0;
+}
+
+.li-div {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+}
+
+.btn {
+  background: #3498db;
+  background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+  background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+  background-image: -o-linear-gradient(top, #3498db, #2980b9);
+  background-image: linear-gradient(to bottom, #3498db, #2980b9);
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 10px 20px 10px 20px;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: #3cb0fd;
+  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  text-decoration: none;
+}
+
+.home_section {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  justify-content: center;
+  background-color: #1f2937;
+  height: 100vh;
+  color: #f3f4f6;
+}
+.h1-home {
+  font-size: 3.75rem;
+  line-height: 1;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+h1 span {
+  color: #3b9035;
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 992px;
+  }
+}
+
+@media (min-width: 768px) {
+  .h1-home {
+    margin-left: 12rem;
+    margin-right: 12rem;
+  }
+  .nav-ul {
+    padding: 2rem 12rem;
+  }
+  .container {
+    max-width: 768px;
+  }
+}
+@media (min-width: 576px) {
+  .container {
+    max-width: 576px;
+  }
+}

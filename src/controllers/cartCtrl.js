@@ -1,5 +1,12 @@
 const foodRepo = require("../repo/foodRepo");
 const Cart = require("../models/cart");
+const User = require("../models/user");
+const {
+  getName,
+  getOrder,
+  getAuthors,
+  getTotals,
+} = require("../repo/orderRepo");
 
 const { cartRepo } = require("../repo/cartRepo");
 
@@ -162,10 +169,28 @@ const getAllCarts = async (req, res) => {
   res.send({ cart });
 };
 
+const getOrderForTheDay = async (req, res) => {
+  try {
+    let authors = await getAuthors();
+    let bg = [],
+      h = 0;
+    for (let i = 0; i < authors.length; i++) {
+      bg[h] = {
+        name: await getName(i),
+        order: await getOrder(i),
+        Total: await getTotals(i),
+      };
+      h++;
+    }
+    res.send({ bg });
+  } catch (error) {}
+};
+
 module.exports = {
   addToCart,
   getUserCart,
   clearCart,
   removeSingleFoodFromCart,
   getAllCarts,
+  getOrderForTheDay,
 };

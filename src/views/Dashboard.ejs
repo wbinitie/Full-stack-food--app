@@ -1,0 +1,34 @@
+<%- include("partials/header"); -%>
+<h1 class="welcome-header">Welcome User!</h1>
+
+<div class="restaurant-selector">
+  <label for="restaurants">Select Restaurant:</label>
+
+  <select name="restaurants" id="restaurants" onchange="change()">
+    <option selected>Please select a restaurant</option>
+    <% allRestaurants.forEach((restaurant) => { %>
+    <option value="volvo"><%= restaurant.name %></option>
+    <% }) %>
+  </select>
+</div>
+
+<div style="display: none" id="restaurants-table-id">
+  <table class="restaurant-table">
+    <thead>
+      <th>Food</th>
+      <th>Price</th>
+      <th>Quantity</th>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <form>
+    <button type="submit">Place Order</button>
+  </form>
+</div>
+<!-- <select name="restaurants" id="restaurants">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="mercedes">Mercedes</option>
+    <option value="audi">Audi</option>
+  </select>
+</div> -->

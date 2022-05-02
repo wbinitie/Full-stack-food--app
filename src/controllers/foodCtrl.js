@@ -3,7 +3,7 @@ const Restaurant = require("../models/restaurant");
 
 const createFood = async (req, res) => {
   const food = new Food({ ...req.body, restaurant: req.params.id });
-  const foods = await Food.find();
+  const foods = await Food.find({ restaurant: req.params.id });
   const restaurant = await Restaurant.findById(req.params.id);
 
   await food.populate("restaurant");
@@ -54,10 +54,18 @@ const updateFood = async (req, res) => {
 const removeFood = async (req, res) => {
   const id = req.params.id;
   try {
-    const food = await Food.findOneAndDelete({
+    const deletedFood = await Food.findOneAndDelete({
       _id: id,
     });
-    if (!food) return res.status(404).send({ message: "Food not found" });
+    const restaurant = await Restaurant.findOne({
+      _id: deletedFood.restaurant,
+    });
+    restaurant.menu = restaurant.menu.filter(
+      (menu) => menu._id !== deletedFood.restaurant
+    );
+    await restaurant.save();
+    if (!deletedFood)
+      return res.status(404).send({ message: "Food not found" });
     res.send({ message: "Food deleted" });
   } catch (error) {
     res.status(500).send();

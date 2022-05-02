@@ -44,6 +44,10 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    resetLink: {
+      data: String,
+      default: "",
+    },
   },
   {
     timestamps: true,
@@ -80,6 +84,15 @@ userSchema.methods.toJSON = function () {
 //Model methods
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
+
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch || !user) throw new Error("Unable to Login");
+  return user;
+};
+
+userSchema.statics.findByAdminCredentials = async (password) => {
+  const user = await User.findOne({ name: "Admin" });
 
   const isMatch = await bcrypt.compare(password, user.password);
 

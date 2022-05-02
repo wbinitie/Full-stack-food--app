@@ -8,9 +8,12 @@ const {
   clearCart,
   removeSingleFoodFromCart,
   getAllCarts,
+  getOrderForTheDay,
 } = require("../controllers/cartCtrl");
 
-router.route("/admin/cart").get(adminAuth, getAllCarts);
+router.route("/admin/cart").get(auth, adminAuth, getAllCarts);
+
+router.route("/admin/getOrders").get(auth, adminAuth, getOrderForTheDay);
 
 router
   .route("/cart")

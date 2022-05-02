@@ -1,0 +1,32 @@
+<%- include("partials/header"); -%>
+<nav>
+  <ul class="nav-ul">
+    <li><img src="/img/logo.png" alt="logo" /></li>
+
+    <li>
+      <div class="li-div">
+        <span>
+          <form>
+            <button formaction="/users/login" class="btn">Sign In</button>
+            <button class="btn" formaction="/users/signup">Sign Up</button>
+          </form>
+        </span>
+      </div>
+    </li>
+  </ul>
+</nav>
+<section
+  style="
+    background-image: url(/img/3.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+  "
+  class="home_section"
+>
+  <h1 class="h1-home">
+    Everything you need <br />
+    <span class="h1-home-span">Delivered now 🚚</span>
+  </h1>
+</section>
+
+<%- include("partials/footer"); -%>
