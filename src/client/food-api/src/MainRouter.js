@@ -12,6 +12,7 @@ import PrivateAdminRoute from "./auth/PrivateAdminRoute";
 import Error from "./components/Core/401";
 import EditRestaurant from "./components/adminComponents/EditRestaurant";
 import userSignUp from "./components/userComponents/signup";
+import Profile from "./components/userComponents/Profile";
 
 const MainRouter = () => {
   return (
@@ -21,8 +22,9 @@ const MainRouter = () => {
       <Route path="/signup" component={userSignUp} />
       <Route path="/error" component={Error} />
       <Route path="/restaurant/edit/:restaurantId" component={EditRestaurant} />
-      <PrivateRoute path="/user/home" component={userHome} />
-      <PrivateRoute path="/user/order" component={Order} />
+      <Route path="/user/:userId" component={Profile} />
+      <PrivateRoute path="/home" component={userHome} />
+      <PrivateRoute path="/order" component={Order} />
 
       <Route exact path="/admin" component={AdminSignIn} />
       <PrivateAdminRoute path="/admin/home" component={AdminHome} />

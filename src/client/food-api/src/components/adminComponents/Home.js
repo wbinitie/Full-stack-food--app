@@ -15,6 +15,7 @@ import {
   downloadRequest,
 } from "./admin-api";
 import Modal from "../Core/Modal";
+import bgImage from "../../assets/6.jpg";
 
 const Home = () => {
   const history = useHistory();
@@ -101,7 +102,15 @@ const Home = () => {
     });
   };
   return (
-    <div>
+    <div
+      style={{
+        backgroundImage: `linear-gradient(to right bottom, #00000080 , #00000080),url(${bgImage})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        height: "100vh",
+      }}
+      className="font-Merriweather text-yellow-50"
+    >
       <nav>
         <ul className="flex justify-between text-xl py-8 px-8 md:px-48 ">
           <li>
@@ -133,7 +142,9 @@ const Home = () => {
           </li>
         </ul>
       </nav>
-      <h1 className="text-center mt-8 text-3xl font-bold ">Welcome Admin!</h1>
+      <h1 className="text-center mt-8 text-3xl font-extrabold ">
+        Welcome Admin!
+      </h1>
       <section id="Restaurants" className="mt-10">
         <div className="text-center font-bold text-lg mx-20">
           <h1>Restaurants</h1>
@@ -219,11 +230,11 @@ const Home = () => {
         </div>
       </section>
       <section id="Orders" className="mt-10">
-        <div className="flex justify-between mx-10">
+        <div className="flex justify-between mx-10 font-extrabold">
           <h1 className="text-3xl">Orders</h1>
           <button
             onClick={clickExport}
-            className="px-2 mx-2 bg-black text-white"
+            className="px-2 mx-2 bg-white text-black rounded-lg"
           >
             EXPORT{" "}
           </button>
@@ -272,8 +283,8 @@ const Home = () => {
               aria-labelledby="profile-tab"
             >
               <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-[100%]">
-                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <table className="w-full text-sm text-left text-gray-500 ">
+                  <thead className="text-base font-bold text-white uppercase dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ">
                     <tr>
                       <th scope="col" className="px-6 py-3">
                         Created
@@ -318,8 +329,8 @@ const Home = () => {
               aria-labelledby="dashboard-tab"
             >
               <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-[100%]">
-                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <table className="w-full text-sm text-left text-gray-500 ">
+                  <thead className="text-base font-bold text-gray-700 uppercase bg-gray-50 ">
                     <tr>
                       <th scope="col" className="px-6 py-3">
                         Created
@@ -336,23 +347,37 @@ const Home = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.allOrders &&
+                    {orders.allOrders && !todayArray[0] ? (
+                      <tr className="bg-white border-b  hover:bg-gray-50 text-black">
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900  whitespace-nowrap"
+                        >
+                          Nil
+                        </th>
+                        <td className="px-6 py-4">Nil</td>
+                        <td className="px-6 py-4">Nil</td>
+                        <td className="px-6 py-4">Nil</td>
+                      </tr>
+                    ) : (
+                      orders.allOrders &&
                       todayArray.map((order, index) => (
                         <tr
                           key={index}
-                          className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                          className="bg-white border-b  hover:bg-gray-50 "
                         >
                           <th
                             scope="row"
-                            className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
+                            className="px-6 py-4 font-medium text-black  whitespace-nowrap"
                           >
                             <Moment format="LLLL">{order.createdAt}</Moment>
                           </th>
-                          <td className="px-6 py-4">{order.name}</td>
+                          <td className="px-6 py-4 ">{order.name}</td>
                           <td className="px-6 py-4">{order.order}</td>
                           <td className="px-6 py-4">{order.Total}</td>
                         </tr>
-                      ))}
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>

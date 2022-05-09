@@ -2,7 +2,7 @@ import React from "react";
 
 const Order = () => {
   return (
-    <div className="bg-gray-100 h-screen">
+    <div className="bg-gray-100 h-screen font-Merriweather">
       <div className="bg-white p-6  md:mx-auto">
         <svg
           viewBox="0 0 24 24"

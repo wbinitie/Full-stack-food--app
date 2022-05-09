@@ -9,8 +9,8 @@ const isActive = (history, path) => {
 };
 
 const Menu = withRouter(({ history, refresh }) => (
-  <nav>
-    <ul className="flex justify-between text-xl py-8 px-8 md:px-48 ">
+  <nav style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}>
+    <ul className="flex justify-between text-xl py-8 px-8 md:px-48 font-Merriweather font-light  ">
       <li>
         <img src={logo} alt="logo" />{" "}
       </li>
@@ -51,7 +51,7 @@ const Menu = withRouter(({ history, refresh }) => (
                 </button>
               </Link>
               <button
-                color="inherit"
+                className="px-2 py-2 text-white rounded-md"
                 onClick={() => {
                   auth.clearJWT("users", () => {
                     history.push("/");

@@ -5,6 +5,7 @@ import { restaurantsList, addToCart } from "./api-user";
 import React, { useState, useEffect } from "react";
 import Modal from "../Core/Modal";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
+import bgImage from "../../assets/5.jpg";
 
 const Home = () => {
   const jwt = auth.isAuthenticated();
@@ -81,17 +82,30 @@ const Home = () => {
     setShow(false);
   };
   return (
-    <div>
+    <div
+      style={{
+        backgroundImage: `linear-gradient(to right bottom, #00000080 , #00000080),url(${bgImage})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        height: "100vh",
+      }}
+      className="font-Merriweather"
+    >
       <Menu refresh={refresh} />
-      <h1 className="text-5xl font-bold text-center my-10">Welcome {name}! </h1>
-      <div className="flex items-center flex-col mb-6">
-        <label className="text-2xl pb-6" htmlFor="restaurants">
+      <h1 className="text-5xl text-white font-bold text-center my-10">
+        Welcome {name}!{" "}
+      </h1>
+      <div className="flex items-center  flex-col mb-6">
+        <label
+          className="text-2xl font-light text-gray-200 pb-6"
+          htmlFor="restaurants"
+        >
           Select Restaurant:
         </label>
         <select
           name="restaurants"
           id="restaurants"
-          className="text-2xl"
+          className="text-2xl rounded-lg"
           // value={fruit.value}
           defaultValue={fruit.value}
           onChange={onChange}
@@ -104,9 +118,9 @@ const Home = () => {
             ))}
         </select>
       </div>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <div className="relative flex justify-center overflow-x-auto shadow-md sm:rounded-lg w-[100%] rounded-lg">
+        <table className="w-[98%]  text-left  text-gray-500 ">
+          <thead className="text-base text-gray-700 uppercase bg-white ">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Food name
@@ -122,13 +136,10 @@ const Home = () => {
           <tbody>
             {restaurants.allRestaurants &&
               restaurants.allRestaurants[index].menu.map((dish, index) => (
-                <tr
-                  key={index}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                >
+                <tr key={index} className="bg-white border-b ">
                   <th
                     scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
+                    className="px-6 py-4 font-bold text-lg  text-gray-900 whitespace-nowrap"
                   >
                     {dish.dish}
                   </th>
@@ -191,6 +202,7 @@ const Home = () => {
                       </Modal>
                     </button>
                   </td>
+                  <hr />
                 </tr>
               ))}
           </tbody>

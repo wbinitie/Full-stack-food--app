@@ -4,9 +4,12 @@ import { useAlert } from "react-alert";
 import { useHistory } from "react-router-dom";
 
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import { GrUpdate } from "react-icons/gr";
 
 import { getRestaurant, updateFood, addFood, deleteFood } from "./admin-api";
 import Modal from "../Core/Modal";
+import bgImage from "../../assets/6.jpg";
+
 const EditRestaurant = ({ match }) => {
   let history = useHistory();
   const jwt = auth.isAuthenticated();
@@ -55,7 +58,15 @@ const EditRestaurant = ({ match }) => {
     setFood({ ...food, [name]: value });
   };
   return (
-    <div>
+    <div
+      style={{
+        backgroundImage: `linear-gradient(to right bottom, #00000080 , #00000080),url(${bgImage})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        height: "100vh",
+      }}
+      className="font-Merriweather relative"
+    >
       <Modal
         title={"Add new Food"}
         show={close}
@@ -120,19 +131,23 @@ const EditRestaurant = ({ match }) => {
           </div>
         </div>
       </Modal>
-      <div className="flex justify-center my-5">
+      <div className="flex flex-row flex-1 mb-20">
         <button
           onClick={history.goBack}
-          className="px-2 text-base text-white rounded-md bg-[#032F8E] mr-4"
+          className="px-6 py-3 absolute top-5 left-3 text-base text-white rounded-md bg-[#032F8E] mr-4"
         >
           <span className="flex ">
             <div className="flex items-center">
               <AiOutlineArrowLeft />
             </div>
-            <p>Go back to all restaurants</p>
+            <p>Go back</p>
           </span>
         </button>
-        <h1 className="text-center text-4xl">{restaurant.name}</h1>
+        <div className="absolute left-[42%]">
+          <h1 className="text-center text-yellow-50 pt-5 text-4xl">
+            {restaurant.name}
+          </h1>
+        </div>
       </div>
 
       <div className="flex justify-center">
@@ -140,14 +155,19 @@ const EditRestaurant = ({ match }) => {
           onClick={(e) => {
             e.preventDefault();
             setClose(true);
+            setFood({
+              id: "",
+              name: "",
+              price: "",
+            });
           }}
           className="px-2 py-2 bg-[#032F8E]  rounded-md text-white"
         >
-          Add Food
+          Add Food ➕
         </button>
       </div>
       <div className="flex justify-center mt-5">
-        <div className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">
+        <div className="bg-black rounded-lg border border-gray-200 w-96 text-gray-900">
           {restaurant.menu &&
             restaurant.menu.map((menu, index) => (
               <button
@@ -162,7 +182,7 @@ const EditRestaurant = ({ match }) => {
               >
                 {menu.dish}
                 <Modal
-                  title={"Edit Food"}
+                  title={"Edit Food 🛠️"}
                   show={open}
                   onClose={() => setOpen(false)}
                 >
@@ -212,7 +232,7 @@ const EditRestaurant = ({ match }) => {
                         }}
                         className="px-2 py-1 mt-2 bg-[#032F8E]  rounded-md text-white"
                       >
-                        Delete Food
+                        Delete Food ❌
                       </div>
                       <div
                         onClick={(e) => {
@@ -234,9 +254,12 @@ const EditRestaurant = ({ match }) => {
                             }
                           });
                         }}
-                        className="px-2 py-1 mt-2 bg-[#032F8E]  rounded-md text-white"
+                        className="px-2 flex items-center py-1 mt-2 bg-[#032F8E]  rounded-md text-white"
                       >
-                        Update Food
+                        Update Food{"  "}
+                        <span>
+                          <GrUpdate />
+                        </span>
                       </div>
                     </div>
                   </div>
