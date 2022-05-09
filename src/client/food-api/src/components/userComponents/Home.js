@@ -1,13 +1,24 @@
 import Menu from "../Core/Menu";
+import { useAlert } from "react-alert";
 import auth from "../../auth/auth-helper";
 import { restaurantsList, addToCart } from "./api-user";
 import React, { useState, useEffect } from "react";
 import Modal from "../Core/Modal";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
+
 const Home = () => {
+  const jwt = auth.isAuthenticated();
+  const alert = useAlert();
   const [restaurants, setRestaurants] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   const [fruit, setFruits] = useState({ value: "Please Select a restaurant" });
-  const [count, setCount] = useState(1);
+  const [order, setOrder] = useState({
+    name: "",
+    quantity: 1,
+    foodId: "",
+    error: "",
+    message: "",
+  });
   // let index = {index: 0};
   const [index, setIndex] = useState(0);
   const [show, setShow] = useState(false);
@@ -48,13 +59,30 @@ const Home = () => {
     setFruits({ value: e.target.value });
   };
   // console.log(restaurants.allRestaurants[index]);
-  const clickSubmit = (e, id) => {
+
+  const clickSubmitOrder = (e) => {
     e.preventDefault();
-    setShow(true);
+    const { foodId, quantity } = order;
+    const newOrder = {
+      foodId: foodId || undefined,
+      quantity: quantity || undefined,
+    };
+    addToCart(newOrder, { t: jwt.token }).then((data) => {
+      if (data && data.error) {
+        setOrder({ ...order, error: data.error });
+        alert.error("Error");
+      } else {
+        setOrder({ ...order, message: data.message });
+        setRefresh(!refresh);
+        alert.success("Added to cart");
+        setOrder({ ...order, quantity: 1 });
+      }
+    });
+    setShow(false);
   };
   return (
     <div>
-      <Menu />
+      <Menu refresh={refresh} />
       <h1 className="text-5xl font-bold text-center my-10">Welcome {name}! </h1>
       <div className="flex items-center flex-col mb-6">
         <label className="text-2xl pb-6" htmlFor="restaurants">
@@ -108,23 +136,56 @@ const Home = () => {
                   <td className="px-6 py-4 text-right">
                     <button
                       type="button"
-                      onClick={clickSubmit}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setShow(true);
+                        setOrder({
+                          ...order,
+                          name: dish.dish,
+                          foodId: dish._id,
+                        });
+                      }}
                       className="bg-transparent border-none p-0 font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
                     >
                       Add to cart
                       <Modal
-                        title={dish.dish}
+                        title={order.name}
                         show={show}
                         onClose={() => setShow(false)}
                       >
                         <div className="flex justify-between">
                           <div className="flex justify-center items-center">
-                            <AiFillMinusCircle size="1.5em" />
-                            <span className="px-4 text-base">1</span>
-                            <AiFillPlusCircle size="1.5em" />
+                            <AiFillMinusCircle
+                              size="1.5em"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setOrder({
+                                  ...order,
+                                  quantity: order.quantity - 1,
+                                });
+                              }}
+                            />
+                            <span className="px-4 text-base">
+                              {order.quantity}
+                            </span>
+                            <AiFillPlusCircle
+                              size="1.5em"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setOrder({
+                                  ...order,
+                                  quantity: order.quantity + 1,
+                                });
+                              }}
+                            />
                           </div>
                           <div>
-                            <button className="px-6 py-4">Add to Order</button>
+                            <div
+                              onClick={clickSubmitOrder}
+                              className="px-6 py-4"
+                            >
+                              Add to Order
+                            </div>
                           </div>
                         </div>
                       </Modal>
@@ -134,14 +195,6 @@ const Home = () => {
               ))}
           </tbody>
         </table>
-      </div>
-      <div className="flex justify-between  mt-5">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-          Place Order
-        </button>
-        <div>
-          <span>Total: 3000 </span>
-        </div>
       </div>
     </div>
   );

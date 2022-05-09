@@ -12,25 +12,16 @@ const {
   forgotPassword,
 } = require("../controllers/userCtrl");
 
-// console.log(await allRestaurants());
 router.route("/users/me").get(auth, getUserProfile);
-router
-  .route("/users/signup")
-  // .get(async (req, res) => {
-  //   res.render("userSignUp");
-  // })
-  .post(createUser);
-// router.route("/users/menu/:id").post(auth, selectFood);
+router.route("/users/signup").post(createUser);
+
 router.get("/dashboard", auth, async (req, res) => {
   res.render("dashboard", {
     allRestaurants: await allRestaurants(),
     posts: [{ title: "rest", content: "Rest" }],
   });
 });
-router
-  .route("/users/login")
-  // s
-  .post(logIn);
+router.route("/users/login").post(logIn);
 
 router.route("/users/forgot-password").patch(forgotPassword);
 router.route("/users/reset-password").patch(resetpassword);

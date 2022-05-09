@@ -8,12 +8,14 @@ const auth = {
     cb();
   },
 
-  clearJWT(cb) {
-    if (typeof window !== "undefined") sessionStorage.removeItem("jwt");
+  clearJWT(role, cb) {
+    if (typeof window !== "undefined") {
+      if (sessionStorage.getItem("jwt"))
+        JSON.parse(sessionStorage.getItem("jwt"));
+      signOut(role, JSON.parse(sessionStorage.getItem("jwt")));
+      sessionStorage.removeItem("jwt");
+    }
     cb();
-    signOut().then((data) => {
-      document.cookie = "t=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    });
   },
   isAuthenticated() {
     if (typeof window == "undefined") return false;

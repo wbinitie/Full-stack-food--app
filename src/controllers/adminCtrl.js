@@ -1,7 +1,7 @@
 const User = require("../models/user");
 
 const adminLogIn = async (req, res) => {
-  const { username, password } = req.body;
+  const { password } = req.body;
   try {
     const user = await User.findByAdminCredentials(password);
     const token = await user.generateAuthToken();
@@ -17,7 +17,7 @@ const adminLogOut = async (req, res) => {
       return token.token !== req.token;
     });
     await req.user.save();
-    res.send("User logged out successfully");
+    res.send("Admin logged out successfully");
   } catch (error) {
     res.status(500).send();
   }

@@ -1,5 +1,21 @@
 const url = "http://localhost:8080";
 
+const create = async (user) => {
+  try {
+    let response = await fetch(`${url}/users/signup`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const restaurantsList = async (signal) => {
   try {
     let response = await fetch(`${url}/restaurant`, {
@@ -11,7 +27,39 @@ const restaurantsList = async (signal) => {
     console.log(err);
   }
 };
+const getCart = async (credentials, signal) => {
+  try {
+    let response = await fetch(`${url}/cart`, {
+      method: "GET",
+      signal: signal,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + credentials.t,
+      },
+    });
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
 
+const removeSingleItem = async (foodId, credentials) => {
+  try {
+    let response = await fetch(`${url}/cart`, {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + credentials.t,
+      },
+      body: JSON.stringify({ foodId }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
 const addToCart = async (order, credentials) => {
   try {
     let response = await fetch(`${url}/cart`, {
@@ -28,4 +76,27 @@ const addToCart = async (order, credentials) => {
     console.log(err);
   }
 };
-export { restaurantsList, addToCart };
+
+const proceedToCheckOut = async (credentials) => {
+  try {
+    let response = await fetch(`${url}/user/order`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + credentials.t,
+      },
+    });
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+export {
+  create,
+  restaurantsList,
+  addToCart,
+  getCart,
+  removeSingleItem,
+  proceedToCheckOut,
+};

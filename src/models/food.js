@@ -4,9 +4,7 @@ const foodSchema = mongoose.Schema(
   {
     dish: {
       type: String,
-      text: true,
       required: true,
-      unique: true,
     },
     price: {
       type: Number,

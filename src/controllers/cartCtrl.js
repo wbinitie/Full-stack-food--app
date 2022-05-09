@@ -1,6 +1,8 @@
 const foodRepo = require("../repo/foodRepo");
 const Cart = require("../models/cart");
-const User = require("../models/user");
+const Order = require("../models/order");
+const xl = require("excel4node");
+
 const {
   getName,
   getOrder,
@@ -153,7 +155,6 @@ const clearCart = async (req, res) => {
     res.status(500).json(err);
   }
 };
-
 const getUserCart = async (req, res) => {
   try {
     const cart = await cartRepo(req.user._id);
@@ -182,10 +183,100 @@ const getOrderForTheDay = async (req, res) => {
       };
       h++;
     }
-    res.send({ bg });
-  } catch (error) {}
+    return bg;
+    // res.send({ bg });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
+const getCheckout = async (req, res) => {
+  try {
+    const order = await Order.findOne({ name: req.user.name });
+    if (!order) return res.status(404).send("Order not found");
+    res.send({ order });
+  } catch (error) {
+    res.status(500).send({ error });
+  }
+};
+
+const proceedToCheckOut = async (req, res) => {
+  const array = await getOrderForTheDay();
+  const userArray = array.filter((user) => user.name === req.user.name);
+  const newOrder = new Order(userArray[0]);
+  await Cart.deleteOne({ author: req.user._id });
+  try {
+    newOrder.save();
+    res.send({ newOrder });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+const adminGetOrders = async (req, res) => {
+  try {
+    const allOrders = await Order.find();
+    if (!allOrders) return res.status(404).send("Orders not found");
+    res.status(200).send({ allOrders });
+  } catch (error) {
+    res.status(500).send();
+  }
+};
+
+const downloadFile = async (req, res) => {
+  try {
+    let allOrders = await Order.find();
+    if (!allOrders) return res.status(404).send("Orders not found");
+
+    const wb = new xl.Workbook();
+    const ws = wb.addWorksheet("Bg food order");
+
+    const colorCell = (color) => {
+      return wb.createStyle({
+        fill: {
+          type: "pattern",
+          fgColor: color,
+          patternType: "solid",
+        },
+      });
+    };
+    const headingColumnNames = ["Name", "Order", "Amt(NGN)"];
+
+    let headingColumnIndex = 1;
+    headingColumnNames.forEach((heading) => {
+      ws.cell(1, headingColumnIndex++)
+        .string(heading)
+        .style(colorCell("#93ccea"));
+    });
+
+    let rowIndex = 2;
+    allOrders.forEach((record) => {
+      let columnIndex = 1;
+      Object.keys(record.schema.obj).forEach((columnName) => {
+        // console.log(columnName);
+        if (typeof record[columnName] === "number") {
+          ws.cell(rowIndex, columnIndex++).number(record[columnName]);
+        } else {
+          ws.cell(rowIndex, columnIndex++).string(record[columnName]);
+        }
+      });
+      rowIndex++;
+    });
+    const total = allOrders.reduce((acc, item) => {
+      return Number(acc.Total) + Number(item.Total);
+    });
+    ws.cell(allOrders.length + 2, 1)
+      .string("Total")
+      .style(colorCell("#FFFF00"));
+    ws.cell(allOrders.length + 2, 2).style(colorCell("#FFFF00"));
+    ws.cell(allOrders.length + 2, 3)
+      .number(total)
+      .style(colorCell("#FFFF00"));
+    wb.write("filename.xlsx", res);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+};
 module.exports = {
   addToCart,
   getUserCart,
@@ -193,4 +284,8 @@ module.exports = {
   removeSingleFoodFromCart,
   getAllCarts,
   getOrderForTheDay,
+  proceedToCheckOut,
+  getCheckout,
+  adminGetOrders,
+  downloadFile,
 };

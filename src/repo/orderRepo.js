@@ -33,7 +33,7 @@ const getOrder = async (i) => {
   let order = await toJSON();
   order = order[i].items
     .map((item) => {
-      return item.foodName;
+      return item.foodName + " x" + item.quantity;
     })
     .join(", ");
 

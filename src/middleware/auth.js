@@ -1,9 +1,5 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const JWTstrategy = require("passport-jwt").Strategy;
-const ExtractJWT = require("passport-jwt").ExtractJwt;
-const passport = require("passport");
-const localStrategy = require("passport-local").Strategy;
 
 require("dotenv").config();
 
@@ -27,7 +23,7 @@ const auth = async (req, res, next) => {
   try {
     const token = req.header("Authorization").replace("Bearer ", "");
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // console.log(decoded);
+
     const user = await User.findOne({
       _id: decoded._id,
       "tokens.token": token,

@@ -1,6 +1,8 @@
+const url = "http://localhost:8080";
+
 const signIn = async (user, role) => {
   try {
-    let response = await fetch(`http://localhost:8080/${role}/login/`, {
+    let response = await fetch(`${url}/${role}/login/`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -15,10 +17,13 @@ const signIn = async (user, role) => {
   }
 };
 
-const signOut = async () => {
+const signOut = async (role, { token }) => {
   try {
-    let response = await fetch("/admin/logout/", {
+    let response = await fetch(`${url}/${role}/logout`, {
       method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
     });
     return await response.json();
   } catch (err) {

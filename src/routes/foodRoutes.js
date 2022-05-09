@@ -1,7 +1,7 @@
 const express = require("express");
 const router = new express.Router();
 
-const { adminAuth } = require("../middleware/auth");
+const { auth, adminAuth } = require("../middleware/auth");
 
 const {
   createFood,
@@ -11,12 +11,12 @@ const {
   getSingleFood,
 } = require("../controllers/foodCtrl");
 
-router.route("/foods").get(getAllFoods);
+router.route("/foods").get(auth, getAllFoods);
 router
   .route("/foods/:id")
-  .post(adminAuth, createFood)
+  .post(auth, adminAuth, createFood)
   .get(getSingleFood)
-  .patch(adminAuth, updateFood)
-  .delete(adminAuth, removeFood);
+  .patch(auth, adminAuth, updateFood)
+  .delete(auth, adminAuth, removeFood);
 
 module.exports = router;

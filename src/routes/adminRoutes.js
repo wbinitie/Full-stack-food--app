@@ -10,8 +10,8 @@ const {
 } = require("../controllers/adminCtrl.js");
 
 router.route("/admin/login").post(adminLogIn);
-router.route("/admin/logout").post(adminLogOut);
-router.route("/admin/logoutall").post(adminLogOutAll);
+router.route("/admin/logout").post(auth, adminLogOut);
+router.route("/admin/logoutall").post(auth, adminLogOutAll);
 
 router.route("/admin/me").get(auth, adminAuth, getAdminProfile);
 

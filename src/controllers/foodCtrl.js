@@ -3,25 +3,12 @@ const Restaurant = require("../models/restaurant");
 
 const createFood = async (req, res) => {
   const food = new Food({ ...req.body, restaurant: req.params.id });
-  const foods = await Food.find({ restaurant: req.params.id });
   const restaurant = await Restaurant.findById(req.params.id);
 
-  await food.populate("restaurant");
-
-  const newData = {
-    name: restaurant.name,
-    menu: [
-      ...foods,
-      {
-        dish: food.dish,
-        price: food.price,
-        restaurant: req.params.id,
-      },
-    ],
-  };
+  restaurant.menu = restaurant.menu.concat(food);
   try {
-    await restaurant.updateOne(newData);
     await food.save();
+    await restaurant.save();
     res.status(201).send({ message: "Food saved successfully", food });
   } catch (err) {
     res.status(400).send(err);
@@ -42,9 +29,19 @@ const updateFood = async (req, res) => {
     const food = await Food.findOne({
       _id: req.params.id,
     });
+    const restaurantId = food.restaurant;
+    const restaurant = await Restaurant.findById(restaurantId);
+
+    restaurant.menu = restaurant.menu.filter(
+      (food) => food.id != req.params.id
+    );
+
     if (!food) return res.status(404).send({ message: "Food not found" });
     toUpdate.forEach((update) => (food[update] = req.body[update]));
+    restaurant.menu = restaurant.menu.concat(food);
+
     await food.save();
+    await restaurant.save();
 
     res.send({ message: "Food Updated", food });
   } catch (error) {
@@ -57,15 +54,16 @@ const removeFood = async (req, res) => {
     const deletedFood = await Food.findOneAndDelete({
       _id: id,
     });
+    if (!deletedFood)
+      return res.status(404).send({ message: "Food not found" });
     const restaurant = await Restaurant.findOne({
       _id: deletedFood.restaurant,
     });
     restaurant.menu = restaurant.menu.filter(
-      (menu) => menu._id !== deletedFood.restaurant
+      (dish) => dish.id != req.params.id
     );
     await restaurant.save();
-    if (!deletedFood)
-      return res.status(404).send({ message: "Food not found" });
+
     res.send({ message: "Food deleted" });
   } catch (error) {
     res.status(500).send();

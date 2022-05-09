@@ -11,13 +11,16 @@ const Modal = ({ show, onClose, title, children }) => {
     >
       <div onClick={(e) => e.stopPropagation()} className="w-125 bg-white">
         <div className="p-3">
-          <h2 className="m-0 text-lg">{title}</h2>
+          <h2 className="m-0 text-lg text-black">{title}</h2>
         </div>
         <div className="p-3 border-t border-[#eee] border-b">{children}</div>
         <div className="p-3">
-          <button onClick={onClose} className="bg-grey text-black">
+          <div
+            onClick={onClose}
+            className="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded w-[15%] cursor-pointer"
+          >
             Close
-          </button>
+          </div>
         </div>
       </div>
     </div>

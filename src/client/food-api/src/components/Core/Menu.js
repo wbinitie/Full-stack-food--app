@@ -2,13 +2,13 @@ import React from "react";
 import logo from "../../assets/Logo.png";
 import auth from "../../auth/auth-helper";
 import { withRouter, Link } from "react-router-dom";
-
+import SideBar from "../Core/SideBar";
 const isActive = (history, path) => {
   if (history.location.pathname === path) return { color: "#ffa726" };
   else return { color: "#ffffff" };
 };
 
-const Menu = withRouter(({ history }) => (
+const Menu = withRouter(({ history, refresh }) => (
   <nav>
     <ul className="flex justify-between text-xl py-8 px-8 md:px-48 ">
       <li>
@@ -53,13 +53,14 @@ const Menu = withRouter(({ history }) => (
               <button
                 color="inherit"
                 onClick={() => {
-                  auth.clearJWT(() => {
+                  auth.clearJWT("users", () => {
                     history.push("/");
                   });
                 }}
               >
                 Sign Out
               </button>
+              <SideBar refresh={refresh} />
             </span>
           )}
         </div>

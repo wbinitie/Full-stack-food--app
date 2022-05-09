@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { signIn } from "../../auth/auth-api";
+import { create } from "../userComponents/api-user";
 import auth from "../../auth/auth-helper";
 import { useHistory } from "react-router-dom";
 
-function LogIn() {
+function SignUp() {
   const history = useHistory();
   const [values, setValues] = useState({
-    username: "",
+    name: "",
+    email: "",
     password: "",
-    error: "",
   });
 
   const handleChange = (event) => {
@@ -18,46 +18,49 @@ function LogIn() {
 
   const clickSubmit = () => {
     const user = {
-      username: values.email || undefined,
+      name: values.name || undefined,
+      email: values.email || undefined,
       password: values.password || undefined,
     };
 
-    signIn(user, "admin").then((data) => {
+    create(user).then((data) => {
       if (data.error) {
         setValues({ ...values, error: data.error });
+        alert(data.error);
       } else {
         auth.authenticate(data, () => {
-          setValues({ ...values, error: "" });
-          history.push("/admin/home");
+          history.push("/user/home");
         });
       }
     });
   };
-
-  // const { from } = props.location.state || {
-  //   //The Navigate component, if rendered,
-  //   //will take the app to the last location that was received in the props or to the Home component at the root.
-  //   from: {
-  //     pathname: "/admin/home",
-  //   },
-  // };
-
   return (
     <div>
       {/* page */}
       <main className="mx-auto flex min-h-screen w-full items-center justify-center bg-gray-900 text-white">
         {/* <!-- component --> */}
         <section className="flex w-[30rem] flex-col space-y-10">
-          <div className="text-center text-4xl font-medium">Log In</div>
+          <div className="text-center text-4xl font-medium">Sign Up</div>
 
           <div className="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
             <input
               type="text"
-              name="username"
-              id="username"
-              value={values.username}
+              name="name"
+              id="name"
+              value={values.name}
               onChange={handleChange}
-              placeholder="Email or Username"
+              placeholder="Full Name.... "
+              className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+            />
+          </div>
+          <div className="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
+            <input
+              type="text"
+              name="email"
+              id="email"
+              value={values.email}
+              onChange={handleChange}
+              placeholder="Email.... "
               className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
             />
           </div>
@@ -78,12 +81,23 @@ function LogIn() {
             onClick={clickSubmit}
             className="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400"
           >
-            LOG IN
+            SIGN UP
           </button>
+
+          <p className="text-center text-lg">
+            Have an account already?
+            <a
+              href="/signIn"
+              className="font-medium text-indigo-500 underline-offset-4 hover:underline"
+            >
+              {" "}
+              Sign In
+            </a>
+          </p>
         </section>
       </main>
     </div>
   );
 }
 
-export default LogIn;
+export default SignUp;

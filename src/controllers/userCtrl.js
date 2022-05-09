@@ -1,6 +1,5 @@
 const User = require("../models/user");
 const _ = require("lodash");
-const passport = require("passport");
 
 const createUser = async (req, res) => {
   const user = new User(req.body);

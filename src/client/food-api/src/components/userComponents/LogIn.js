@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { signIn } from "../../auth/auth-api";
 import auth from "../../auth/auth-helper";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
-function LogIn() {
-  const history = useHistory();
+function LogIn(props) {
+  // const history = useHistory();
   const [values, setValues] = useState({
     email: "",
     password: "",
-    redirectToReferrer: false,
   });
 
   const handleChange = (event) => {
@@ -29,11 +29,20 @@ function LogIn() {
       } else {
         auth.authenticate(data, () => {
           setValues({ ...values, error: "", redirectToReferrer: true });
-          history.push("/user/home");
         });
       }
     });
   };
+
+  const { from } = {
+    from: {
+      pathname: "/user/home",
+    },
+  };
+  const { redirectToReferrer } = values;
+  if (redirectToReferrer) {
+    return <Redirect to={from} />;
+  }
   return (
     <div>
       {/* page */}
@@ -83,7 +92,7 @@ function LogIn() {
           <p className="text-center text-lg">
             No account?
             <a
-              href="/"
+              href="/signup"
               className="font-medium text-indigo-500 underline-offset-4 hover:underline"
             >
               Create One
