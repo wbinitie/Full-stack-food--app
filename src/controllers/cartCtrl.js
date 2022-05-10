@@ -226,6 +226,38 @@ const downloadFile = async (req, res) => {
   try {
     let allOrders = await Order.find();
     if (!allOrders) return res.status(404).send("Orders not found");
+    const current = new Date();
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const month = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    let date;
+    if (current.getDate() > 9) {
+      date = `${days[current.getDay()]} ${
+        month[current.getMonth()]
+      } ${current.getDate()}`;
+    } else {
+      date = `${days[current.getDay()]} ${
+        month[current.getMonth()]
+      } 0${current.getDate()}`;
+    }
+
+    console.log(date);
+    console.log(allOrders[0].createdAt.toString().slice(0, 10));
+    const newAllOrders = allOrders.filter(
+      (orders) => orders.createdAt.toString().slice(0, 10) === date
+    );
 
     const wb = new xl.Workbook();
     const ws = wb.addWorksheet("Bg food order");
@@ -249,7 +281,7 @@ const downloadFile = async (req, res) => {
     });
 
     let rowIndex = 2;
-    allOrders.forEach((record) => {
+    newAllOrders.forEach((record) => {
       let columnIndex = 1;
       Object.keys(record.schema.obj).forEach((columnName) => {
         // console.log(columnName);
@@ -261,14 +293,13 @@ const downloadFile = async (req, res) => {
       });
       rowIndex++;
     });
-    const total = allOrders.reduce((acc, item) => {
-      return Number(acc.Total) + Number(item.Total);
-    });
-    ws.cell(allOrders.length + 2, 1)
+    const totalArray = newAllOrders.map((order) => order.Total);
+    const total = totalArray.reduce((acc, item) => acc + item, 0);
+    ws.cell(newAllOrders.length + 2, 1)
       .string("Total")
       .style(colorCell("#FFFF00"));
-    ws.cell(allOrders.length + 2, 2).style(colorCell("#FFFF00"));
-    ws.cell(allOrders.length + 2, 3)
+    ws.cell(newAllOrders.length + 2, 2).style(colorCell("#FFFF00"));
+    ws.cell(newAllOrders.length + 2, 3)
       .number(total)
       .style(colorCell("#FFFF00"));
     wb.write("filename.xlsx", res);
