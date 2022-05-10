@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { signIn } from "../../auth/auth-api";
 import auth from "../../auth/auth-helper";
 import { useHistory } from "react-router-dom";
+import { useAlert } from "react-alert";
 
 function LogIn() {
+  const alert = useAlert();
+
   const history = useHistory();
   const [values, setValues] = useState({
     username: "",
@@ -25,6 +28,7 @@ function LogIn() {
     signIn(user, "admin").then((data) => {
       if (data.error) {
         setValues({ ...values, error: data.error });
+        alert.error(data.error);
       } else {
         auth.authenticate(data, () => {
           setValues({ ...values, error: "" });

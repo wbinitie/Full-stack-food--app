@@ -7,7 +7,7 @@ const adminLogIn = async (req, res) => {
     const token = await user.generateAuthToken();
     res.send({ user, token });
   } catch (error) {
-    res.status(400).send();
+    res.status(400).json({ error: error.message });
   }
 };
 

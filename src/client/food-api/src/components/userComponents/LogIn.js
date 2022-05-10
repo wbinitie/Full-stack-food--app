@@ -3,8 +3,11 @@ import { signIn } from "../../auth/auth-api";
 import auth from "../../auth/auth-helper";
 // import { useHistory } from "react-router-dom";
 import { Redirect } from "react-router-dom";
+import { useAlert } from "react-alert";
 
 function LogIn(props) {
+  const alert = useAlert();
+
   // const history = useHistory();
   const [values, setValues] = useState({
     email: "",
@@ -25,7 +28,7 @@ function LogIn(props) {
     signIn(user, "users").then((data) => {
       if (data.error) {
         setValues({ ...values, error: data.error });
-        alert(data.error);
+        alert.error(data.error);
       } else {
         auth.authenticate(data, () => {
           setValues({ ...values, error: "", redirectToReferrer: true });

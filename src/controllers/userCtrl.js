@@ -31,13 +31,12 @@ const createUser = async (req, res) => {
 
 const logIn = async (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email, password);
   try {
     const user = await User.findByCredentials(email, password);
     const token = await user.generateAuthToken();
     res.send({ user, token });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).json({ error: error.message });
   }
 };
 
