@@ -16,6 +16,7 @@ import {
 } from "./admin-api";
 import Modal from "../Core/Modal";
 import bgImage from "../../assets/6.jpg";
+import LoadingSpinner from "../Core/LoadingSpinner";
 
 const Home = () => {
   const history = useHistory();
@@ -24,6 +25,8 @@ const Home = () => {
 
   const [newRestaurant, setNewRestaurant] = useState({ name: "" });
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [orders, setOrders] = useState({});
   const [refreshKey, setRefreshKey] = useState(0);
   const [restaurants, setRestaurants] = useState([]);
@@ -33,11 +36,13 @@ const Home = () => {
     // which can be used to remove the event listener.
     const abortController = new AbortController();
     const signal = abortController.signal;
+    setIsLoading(true);
     restaurantsList(signal).then((data) => {
       if (data && data.error) {
         console.log(data.error);
       } else {
         setRestaurants(data);
+        setIsLoading(false);
       }
     });
 
@@ -89,9 +94,17 @@ const Home = () => {
     });
   };
   const current = new Date();
-  const date = `${current.getFullYear()}-0${
-    current.getMonth() + 1
-  }-0${current.getDate()}`;
+  let date;
+  if (current.getDate() > 9) {
+    date = `${current.getFullYear()}-0${
+      current.getMonth() + 1
+    }-${current.getDate()}`;
+  } else {
+    date = `${current.getFullYear()}-0${
+      current.getMonth() + 1
+    }-0${current.getDate()}`;
+  }
+  console.log(date);
   const todayArray =
     orders.allOrders &&
     orders.allOrders.filter((order) => order.createdAt.slice(0, 10) === date);
@@ -187,46 +200,53 @@ const Home = () => {
             </div>
           </Modal>
         </div>
-        <div className="mx-60 my-3">
-          <ol>
-            {restaurants.allRestaurants &&
-              restaurants.allRestaurants.map((restaurant, index) => (
-                <div key={index} className="flex justify-between items-center">
-                  <li className="pb-3">
-                    {index + 1}. {restaurant.name}
-                  </li>
-                  <span className=" flex items-center">
-                    <Link to={"/restaurant/edit/" + restaurant._id}>
+        <div className="my-3 mx-60">
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <ol>
+              {restaurants.allRestaurants &&
+                restaurants.allRestaurants.map((restaurant, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between items-center"
+                  >
+                    <li className="pb-3">
+                      {index + 1}. {restaurant.name}
+                    </li>
+                    <span className="flex items-center">
+                      <Link to={"/restaurant/edit/" + restaurant._id}>
+                        <button
+                          type="button"
+                          className=" mx-1 bg-transparent border-none p-0 font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+                        >
+                          Edit
+                        </button>
+                      </Link>
+                      |
                       <button
                         type="button"
-                        className=" mx-1 bg-transparent border-none p-0 font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
-                      >
-                        Edit
-                      </button>
-                    </Link>
-                    |
-                    <button
-                      type="button"
-                      onClick={() => {
-                        deleteRestaurant(restaurant._id, { t: jwt.token }).then(
-                          (data) => {
+                        onClick={() => {
+                          deleteRestaurant(restaurant._id, {
+                            t: jwt.token,
+                          }).then((data) => {
                             if (data && data.error) {
                               console.log(data.error);
                             } else {
                               alert.success("Restaurant removed");
                               setRefreshKey((oldKey) => oldKey + 1);
                             }
-                          }
-                        );
-                      }}
-                      className=" ml-1 bg-transparent border-none p-0 font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
-                    >
-                      Delete
-                    </button>
-                  </span>
-                </div>
-              ))}
-          </ol>
+                          });
+                        }}
+                        className=" ml-1 bg-transparent border-none p-0 font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+                      >
+                        Delete
+                      </button>
+                    </span>
+                  </div>
+                ))}
+            </ol>
+          )}
         </div>
       </section>
       <section id="Orders" className="mt-10">

@@ -1,4 +1,4 @@
-const url = "http://localhost:8080";
+const url = "https://binitie-bg-food-app.herokuapp.com";
 
 const create = async (user) => {
   try {

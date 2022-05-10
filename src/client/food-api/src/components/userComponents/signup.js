@@ -29,7 +29,7 @@ function SignUp() {
         alert(data.error);
       } else {
         auth.authenticate(data, () => {
-          history.push("/user/home");
+          history.push("/");
         });
       }
     });

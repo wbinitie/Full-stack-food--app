@@ -32,7 +32,7 @@ const Home = () => {
           style={{
             background: `linear-gradient(90deg, rgba(3,47,142,1) 0%, rgba(59,144,53,1) 100%)`,
           }}
-          class=" mx-auto mt-20 text-center opacity-90 hover:translate-y-2 delay-150 hover:opacity-100 text-white font-bold rounded-full py-2 w-2/12 focus:outline-none border-2 border-[#3B9035]"
+          className=" mx-auto mt-20 text-center opacity-90 hover:translate-y-2 delay-150 hover:opacity-100 text-white font-bold rounded-full py-2 w-2/12 focus:outline-none border-2 border-[#3B9035]"
         >
           Make Order
         </button>

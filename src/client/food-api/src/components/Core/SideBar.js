@@ -39,7 +39,7 @@ const SideBar = ({ refresh }) => {
     e.preventDefault();
     proceedToCheckOut({ t: jwt.token }).then((data) => {
       alert.success("Order Placed");
-      history.push("/user/order");
+      history.push("/order");
     });
   };
   return (
