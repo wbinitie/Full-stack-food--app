@@ -18,7 +18,7 @@ const app = express();
 //   res.send("Server is currently under maintenance");
 // });
 const corsOptions = {
-  origin: "https://627a917020e2f148fef48b95--bg-food-app.netlify.app",
+  origin: "https://bg-food-app.netlify.app",
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
