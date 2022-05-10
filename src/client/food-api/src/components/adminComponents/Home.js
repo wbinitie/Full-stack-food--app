@@ -104,7 +104,6 @@ const Home = () => {
       current.getMonth() + 1
     }-0${current.getDate()}`;
   }
-  console.log(date);
   const todayArray =
     orders.allOrders &&
     orders.allOrders.filter((order) => order.createdAt.slice(0, 10) === date);
@@ -143,7 +142,7 @@ const Home = () => {
                     className="px-4 py-2 bg-[#032F8E]  rounded-md text-white"
                     onClick={() => {
                       auth.clearJWT("admin", () => {
-                        history.push("/adminSignIn");
+                        history.push("/admin");
                       });
                     }}
                   >
