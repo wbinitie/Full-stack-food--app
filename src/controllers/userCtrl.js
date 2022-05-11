@@ -10,7 +10,7 @@ const createUser = async (req, res) => {
 
     res.status(201).send({ message: "User created successfully", user, token });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).json({ error: error.message });
   }
 };
 

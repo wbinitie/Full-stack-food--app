@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { create } from "../userComponents/api-user";
 import auth from "../../auth/auth-helper";
 import { useHistory } from "react-router-dom";
+import { useAlert } from "react-alert";
 
 function SignUp() {
+  const alert = useAlert();
+
   const history = useHistory();
   const [values, setValues] = useState({
     name: "",
@@ -26,7 +29,7 @@ function SignUp() {
     create(user).then((data) => {
       if (data.error) {
         setValues({ ...values, error: data.error });
-        alert(data.error);
+        alert.error(data.error);
       } else {
         auth.authenticate(data, () => {
           history.push("/");
